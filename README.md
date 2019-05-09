@@ -5,12 +5,15 @@ A repository of examples of using different statistical and machine learning alg
 ## Algorithms to investigate
 
 * Linear regression
-* GLM
+* Generalized Linear Model
     * Logistic regression
-* SVM
+* Support Vector Machine
+      * https://shuzhanfan.github.io/2018/05/understanding-mathematics-behind-support-vector-machines/
 * Random forest
 * Gradient boosting
-* PCA
+* Dimensionality reduction
+      * PCA
+      * NMDS
 * K-means clustering
 * Collaborative filtering
 * kNN
@@ -26,3 +29,10 @@ A repository of examples of using different statistical and machine learning alg
         * `Stan`
     * Deeply nested
 
+## More about machine learning in R
+
+* https://mlr.mlr-org.com/index.html
+
+## Statistical learning resources
+
+* https://www.youtube.com/playlist?list=PLOg0ngHtcqbPTlZzRHA2ocQZqB1D_qZ5V
