@@ -8,12 +8,12 @@ A repository of examples of using different statistical and machine learning alg
 * Generalized Linear Model
     * Logistic regression
 * Support Vector Machine
-      * https://shuzhanfan.github.io/2018/05/understanding-mathematics-behind-support-vector-machines/
+    * https://shuzhanfan.github.io/2018/05/understanding-mathematics-behind-support-vector-machines/
 * Random forest
 * Gradient boosting
 * Dimensionality reduction
-      * PCA
-      * NMDS
+    * PCA
+    * NMDS
 * K-means clustering
 * Collaborative filtering
 * kNN
