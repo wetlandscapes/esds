@@ -28,6 +28,7 @@ A repository of examples of using different statistical and machine learning alg
     * Bayesian
         * `Stan`
     * Deeply nested
+* Structural equation modeling
 
 ## More about machine learning in R
 
