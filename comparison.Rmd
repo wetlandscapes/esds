@@ -273,9 +273,9 @@ knitr::read_chunk("scripts/mapview_comparison.R")
 
 
 ```{r, fig.height=7}
-#Record the name of all the plots
-density_p_files <- paste0("figures/R/comparison/", temper_ttest$station_id,
-                          ".png")
+#Hardcode the static locations of the files.
+web_files <- paste0("https://github.com/wetlandscapes/esds/figures/R/",
+                    "comparison/", temper_ttest$station_id, ".png")
 
 #Generate a categorical color palette
 cp <- ocean.balance(11)[c(2, 9)]
@@ -300,7 +300,7 @@ temper_tested %>%
   mapView(zcol = "Temp. bias (C)",
           label = .$name,
           color = "gray50",
-          popup = popupImage(density_p_files, src = "remote"))
+          popup = popupImage(web_files, src = "remote"))
 ```
 
 
