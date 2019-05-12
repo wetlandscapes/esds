@@ -275,9 +275,9 @@ knitr::read_chunk("scripts/mapview_comparison.R")
 ```{r, fig.height=7}
 #Hardcode the static locations of the files.
   #Note the "blob/master" part of the 
-# web_files <- paste0("https://github.com/wetlandscapes/esds/blob/master/",
-#                     "figures/R/comparison/", temper_ttest$station_id, ".png")
-web_files <- paste0("../figures/R/comparison/", temper_ttest$station_id, ".png")
+web_files <- paste0("https://raw.githubusercontent.com/wetlandscapes/esds/master/",
+                    "figures/R/comparison/", temper_ttest$station_id, ".png")
+# web_files <- paste0("../figures/R/comparison/", temper_ttest$station_id, ".png")
 
 #Generate a categorical color palette
 cp <- ocean.balance(11)[c(2, 9)]
