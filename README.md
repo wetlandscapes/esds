@@ -1,4 +1,4 @@
-# Data science in hydropedology
+# Earth System Data Science (ESDS)
 
 A repository of examples of using different statistical and machine learning algorithms (mostly in R) in hydropedology
 
@@ -12,7 +12,36 @@ I'll largely be focused on using R.
 
 ## About the data
 
-For the sake of consistency, I'll be focusing on a single data set, which I will then "interogate" using different data science tools.
+### Hydrology data
+
+A combination of USGS stream discharge, landscape, and climate data.
+
+#### Stream data -- National Water Information System
+
+https://help.waterdata.usgs.gov/
+https://owi.usgs.gov/R/dataRetrieval.html
+
+#### Landscape data -- GAGES-II
+
+https://www.sciencebase.gov/catalog/item/59692a64e4b0d1f9f05fbd39
+
+#### Climate data -- PRISM
+
+http://www.prism.oregonstate.edu/
+
+Keep it simple, so focus on:
+
+* Precipitation
+* Mean temperature
+* Dew point temperature? Use this to get at relative humidity?
+
+#### Climate data -- NRCS SNOTEL
+
+* How can I automate the download of these data?
+* Could I use these data to optimize a phase curve via logistic regression?
+
+
+### Soils data
 
 Focus: ISRIC soils information (https://www.isric.org/)
 Data availability: ISRIC Soil Data Hub (https://data.isric.org)
@@ -26,6 +55,26 @@ Data availability: ISRIC Soil Data Hub (https://data.isric.org)
 * Can I tell which continent a soil came from?
 * What are the most important attributes defining a soil (relative to the data I have)? (PCA or NMDS question.)
 * Do different soil attributes influence one another? (SEM question)
+* Are mean annual temperature data from PRISM and actual station data different from each other?
+    * Is there geographic bias in the errors or significant differences?
+    * Pair-wise __t-tests__ or other comparisons (Mann-Whitney)
+    * Download the data from CompBio
+        * Frequentist vs Bayesian methods
+* Can we predict the phase of snow using air temperature and other environmental data?
+    * This is a classification problem that could be addressed with __logistic regression__ and __SVM__.
+* Are there significant trends in annual discharge over time?
+    * __Linear regression__
+    * Map out the slope of significant trends across the US.
+        * Use leaflet and clickable links to see individual annual hydrographs marked with a colored trend line and highlighting abnormal years using the emperical density function.
+    * Include both Frequentist and Bayesian forms of the analysis.
+* Is there a relationship between annual discharge, temperature, snow, elevation, etc?
+    * __Multiple linear regression__
+* What role do different landscape features have on the above relationships?
+    * Could use the GAGES-II data set for this
+    * __Hierarchical multiple linear regression__
+    * Frequentist and Bayesian
+* Are their "natural" groups of discharge sensitivity (represented by the steepness of the slope)?
+    * __Discriminant analysis__
 
 ## Algorithms to investigate
 
@@ -77,6 +126,7 @@ How should I organize these algorithms? By Data type output? (This will help me 
         * Random forest
             * `party`
         * Naive Bayes
+            * Is this the same thing as discriminant analysis (which uses Bayes' Theorem)
     * Unsupervised
         * K-means clustering
         * kNN (K-nearest neighbors)
