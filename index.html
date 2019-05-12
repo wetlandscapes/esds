@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jason Mercer" />
+
+
+<title>About this site</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Earth System Data Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="comparison.html">Comparisons</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">About this site</h1>
+<h4 class="author">Jason Mercer</h4>
+<h4 class="date">Last updated: 2019-05-12</h4>
+
+</div>
+
+
+<pre class="r"><code>#Options----
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 9,
+  fig.height = 5,
+  dev = &quot;svglite&quot;)</code></pre>
+<div id="about-this-site" class="section level2">
+<h2>About this site</h2>
+<p>The purpose of this site is to provide some insights into how to do common data science tasks in the context of <strong>earth system science (ESS)</strong>. Generally speaking, earth system science focuses on interactions between the various “spheres” of the earth system. In the context of this site, we’re largely going to focus on the atmosphere, hydrosphere, and pedosphere (Soils! Please don’t put me on some kind of FBI list…), with some of the biosphere thrown in for good measure.</p>
+<p><strong>Data science (DS)</strong>, like ESS, is also multi-disciplinary, and includes concepts from statistics, computer science, programming, etc. Thus, the combination of ESS and DS is <strong>earth system data science (ESDS)</strong>. In this context, we’ll be moving through a number a techniques and algorithms that can be used in ESDS to answer questions we might have about the Earth system. These could include:</p>
+<ul>
+<li>How well do <em>predicted</em> mean annual air temperatures describe <em>observed</em> air temperatures at weather stations?</li>
+<li>Has river discharge changed across the US over the last century, and do those shifts express a spatial pattern?</li>
+<li>Are there “natural” flow regimes across rivers in the US?</li>
+<li>How do soil physical, hydrological, and chemical properties influence each other?</li>
+<li>Can we classify a wetland based on landscape features (e.g., elevation, imagery)?</li>
+</ul>
+<p>We’ll touch on some of the above questions, plus some others, using differing data science techniques that range, loosely, from regression to classification.</p>
+<hr />
+</div>
+<div id="core-data-science-algorithms" class="section level2">
+<h2>Core data science algorithms</h2>
+<p>There are a HUGE number of data science techniques out there. Too many for a single website. So, instead of doing all of them, we are just going to focus on a few really common ones. Loosely, DS and statistical techniques can be broken up into two broad categories that are not mutually exclusive, nor exhaustive: <strong>regression</strong> and <strong>classification</strong>.</p>
+<div id="regression" class="section level3">
+<h3>Regression</h3>
+<p>Regression principally focuses on numerical outputs. If you think back to your statistics 101 class (or at least that’s when I learned about data types), there are two broad ranges of data: numerical and categorical. Categorical data can be split into nominal and ordinal types, while numerical data consists of interval and ratio data. It is ratio data that regression is largely focused on.</p>
+</div>
+<div id="classification" class="section level3">
+<h3>Classification</h3>
+<p>Classification tends to focus on categorical outputs, which tend to be more in the realm of nominal, ordinal, and sometimes interval data types. Arguably, classification is the more common and difficult problem in data science, compared to regression, and comes in two “flavors”: unsupervised and supervised.</p>
+<p><strong>Unsupervised classification</strong> is great for understanding relationships between groups, especially if the number of groups is already known and the boundaries between those groups are pretty obvious (mathematically speaking).</p>
+<p>A major problem in classification, however, is that the boundaries of a class may be “fuzzy”. For example, where do mountains end? That is, if we wanted to discretize pixels in a raster to “mountain” vs “non-mountain”, what criteria and data would we provide a given classification algorithm to generate those two classes? Elevation? Slope? At what scale?</p>
+<p>To help with the “fuzzy” problem, where groups do not obviously distinguish themselves from one another, we have <strong>supervised classification</strong>. As the name suggests, we include human supervision to help “train” an algorithm to properly classify data.</p>
+</div>
+<div id="and-everything-else" class="section level3">
+<h3>And everything else</h3>
+<p>The above dichotomies are somewhat artificial, however. For example, is multinomial logistic regression a regression or classification algorithm? It has elements of regression (as the name suggests), but is often used for classification problems. Thus, we might see regression and classification as end-members rather than as mutually exclusive categories.</p>
+<p>However, even the end-member construct may be artificial, as there are other problems that don’t fit cleanly between the ideas of regression and classification. For example, where does structural equation modeling fit in all this? Probably closer to regression, but not exactly. What about principle component analysis or non-metric multi-dimensional scaling?</p>
+</div>
+<div id="the-techniques-covered-used-in-this-site" class="section level3">
+<h3>The techniques covered used in this site</h3>
+<p>Based on the above perspectives, the site is grouped into three categories: regression, classification, and everything else. Using those categories, we are going to “interrogate” different data sets to see how the different algorithms might help as answer questions relevant to ESS. Full explanations of how the algorithms work are beyond the scope of this site. Instead, I’m hoping what I’ve done will motivate you to look into the underlying math yourself (and maybe even buy a linear algebra book, which is pretty fundamental to a lot of these problems).</p>
+<div id="regression-1" class="section level4">
+<h4>Regression</h4>
+<ul>
+<li>Comparison (A/B testing)
+<ul>
+<li>T-test</li>
+<li>Mann-Whitney test</li>
+</ul></li>
+<li>Prediction
+<ul>
+<li>Support Vector Machine (SVM)</li>
+<li>Linear regression
+<ul>
+<li>Multilinear regression</li>
+<li>Hierarchical regression</li>
+</ul></li>
+<li>Generalized linear models (GLMs)
+<ul>
+<li>Logistic regression</li>
+</ul></li>
+<li>Generalized additive models (GAMs)</li>
+<li>Non-linear optimization
+<ul>
+<li>Hierarchical non-linear modeling</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="classification-1" class="section level4">
+<h4>Classification</h4>
+<ul>
+<li>Unsupervised
+<ul>
+<li>k-nearest neighbor (kNN)</li>
+<li>k-means clustering</li>
+</ul></li>
+<li>Supervised
+<ul>
+<li>Discriminant analysis</li>
+<li>Naive Bayesian classification</li>
+<li>Classification and regression trees (CART)</li>
+<li>Random forests</li>
+<li>Neural networks
+<ul>
+<li>Deep neural networks</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="everything-else" class="section level4">
+<h4>Everything else</h4>
+<ul>
+<li>Dimensionality reduction
+<ul>
+<li>Principle component analysis (PCA)</li>
+<li>Non-metric multi-dimensional scaling (NMDS)</li>
+</ul></li>
+<li>Gradient boosting</li>
+<li>Collaborative filtering</li>
+<li>Structural equation modeling
+<ul>
+<li>Path analysis</li>
+</ul></li>
+<li>Time series analysis
+<ul>
+<li>Autoregressive integrated moving average (ARIMA)</li>
+</ul></li>
+<li>Uncertainty assessment
+<ul>
+<li>Leave-one-out cross validation</li>
+<li>K-folds cross validation</li>
+</ul></li>
+</ul>
+<hr />
+</div>
+</div>
+</div>
+<div id="frequentist-vs-bayesian-paradigms" class="section level2">
+<h2>Frequentist vs Bayesian paradigms</h2>
+<p>In statistics, there are two major paradigms: Frequentism and Bayesianism. A thorough review of these two schools of thought is beyond the scope of this site, but see the “General resources” section for other places where such reviews have been made. However, the two ideas are pretty well summarized by the following (<a href="https://xkcd.com/1132/">XKCD</a>):</p>
+<center>
+<img src="https://imgs.xkcd.com/comics/frequentists_vs_bayesians.png" />
+</center>
+<p><br> In essence, the Bayesian view point allows us to incorporate past information, if it exists, to update our understanding of how a system works and our confidence in our new understanding. In the context of the comic above, this means we can incorporate past experience related to the sun (not) exploding to better predict if a model’s results are anomalous.</p>
+<p>In practice, this tends to produce greater model uncertainties than Frequentist methods, meaning we are being conservative with how well we think a model will predict some condition of interest. At first that may sound bad, as we want precise predictions, but I’ll argue that this model conservatism is a good thing, because it doesn’t promote as much over confidence in results.</p>
+<p>Bayesian techniques are particularly powerful when:</p>
+<ol style="list-style-type: decimal">
+<li>One has limited data.</li>
+<li>There is prior information about a system (or similar system) of interest.</li>
+<li>A model is complex.</li>
+</ol>
+<p>The downside is that Bayesian techniques tend to be more computational expensive (they use Markov Chain Monte Carlo to solve relatively intractable integrals) and can be pretty sensitive to priors, depending on how they are implemented.</p>
+<p>Last, while Frequentism and Bayesianism are often thought of as being antagonistic, I think that perspective is somewhat counter productive. This is particularly true in cases antithetical to the (numbered) use cases listed above, as the two paradigms will tend to converge on the same solution, thus reducing the complexity of analysis often required for Bayesian analysis.</p>
+<div id="approach-well-be-using" class="section level3">
+<h3>Approach we’ll be using</h3>
+<p>We’ll largely use a Frequentist approach, because the tools for Frequentist analysis are much more abundant and developed. That said, I will also sometimes include Bayesian assessments of probability. Specifically, I will be using <a href="https://mc-stan.org/">Stan</a>, which is a statistical programming language for Bayesian analysis and integrates with a number of other languages including R and Python.</p>
+</div>
+</div>
+<div id="section" class="section level2">
+<h2><!--I need to work on this part.
+----
+
+## The debate -- Why focus on using statistics to understand the earth system?
+
+A major concern in using data science to understand elements of the earth system is that DS tools are not necessarily mechanistic, but empirical. I certainly share that concern, but also do not think of empirical tools as somehow "lesser," but more as a complement, helping us develop knowledge.
+
+However, there are also many circumstances in which we don't
+
+However, we can also think of statistics as a means of assessing uncertainty even in the context of mechanistic models. GLUE, for example.
+
+Aleatory vs epistemic uncertainty, Laplace's Demon (determinism), and the Turing machine
+--></h2>
+</div>
+<div id="programming" class="section level2">
+<h2>Programming</h2>
+<p>I’m going to focus on using the R statistical programming language, because it has become a favorite generalist scripting language used in the statistics, biology, and ESS communities. It is also highly extensible and was used to build this website via the <code>knitr</code> and <code>rmarkdown</code> packages.</p>
+<p>In the context of R, I’ll be largely following “tidyverse” principles related to formating code and data. The <a href="https://style.tidyverse.org/">Tidyverse Style Guide</a> has more on generating tidy code. Chapter 12 of <a href="https://r4ds.had.co.nz/tidy-data.html">R for Data Science</a> has more on tidy data.</p>
+<hr />
+</div>
+<div id="general-resources" class="section level2">
+<h2>General resources</h2>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

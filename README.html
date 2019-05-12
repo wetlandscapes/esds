@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Earth System Data Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="comparison.html">Comparisons</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<div id="earth-system-data-science-esds" class="section level1">
+<h1>Earth System Data Science (ESDS)</h1>
+<p>A repository of examples of using different statistical and machine learning algorithms (mostly in R) in hydropedology</p>
+<div id="why-data-science" class="section level2">
+<h2>Why data science?</h2>
+<div id="what-is-data-science" class="section level3">
+<h3>What is data science?</h3>
+</div>
+<div id="tools-for-data-science" class="section level3">
+<h3>Tools for data science</h3>
+<p>I’ll largely be focused on using R.</p>
+</div>
+</div>
+<div id="about-the-data" class="section level2">
+<h2>About the data</h2>
+<div id="hydrology-data" class="section level3">
+<h3>Hydrology data</h3>
+<p>A combination of USGS stream discharge, landscape, and climate data.</p>
+<div id="stream-data-national-water-information-system" class="section level4">
+<h4>Stream data – National Water Information System</h4>
+<p><a href="https://help.waterdata.usgs.gov/" class="uri">https://help.waterdata.usgs.gov/</a> <a href="https://owi.usgs.gov/R/dataRetrieval.html" class="uri">https://owi.usgs.gov/R/dataRetrieval.html</a></p>
+</div>
+<div id="landscape-data-gages-ii" class="section level4">
+<h4>Landscape data – GAGES-II</h4>
+<p><a href="https://www.sciencebase.gov/catalog/item/59692a64e4b0d1f9f05fbd39" class="uri">https://www.sciencebase.gov/catalog/item/59692a64e4b0d1f9f05fbd39</a></p>
+</div>
+<div id="climate-data-prism" class="section level4">
+<h4>Climate data – PRISM</h4>
+<p><a href="http://www.prism.oregonstate.edu/" class="uri">http://www.prism.oregonstate.edu/</a></p>
+<p>Keep it simple, so focus on:</p>
+<ul>
+<li>Precipitation</li>
+<li>Mean temperature</li>
+<li>Dew point temperature? Use this to get at relative humidity?</li>
+</ul>
+</div>
+<div id="climate-data-nrcs-snotel" class="section level4">
+<h4>Climate data – NRCS SNOTEL</h4>
+<ul>
+<li>How can I automate the download of these data?</li>
+<li>Could I use these data to optimize a phase curve via logistic regression?</li>
+</ul>
+</div>
+</div>
+<div id="soils-data" class="section level3">
+<h3>Soils data</h3>
+<p>Focus: ISRIC soils information (<a href="https://www.isric.org/" class="uri">https://www.isric.org/</a>) Data availability: ISRIC Soil Data Hub (<a href="https://data.isric.org" class="uri">https://data.isric.org</a>)</p>
+</div>
+<div id="data-manipulation" class="section level3">
+<h3>Data manipulation</h3>
+</div>
+</div>
+<div id="questions-of-interest" class="section level2">
+<h2>Questions of interest</h2>
+<ul>
+<li>Is there a relationship between soil attributes and climate (Koppen-Geiger)?
+<ul>
+<li>We know this from the five soil-forming factors, but can we quantify the relationship?</li>
+</ul></li>
+<li>Can I tell which continent a soil came from?</li>
+<li>What are the most important attributes defining a soil (relative to the data I have)? (PCA or NMDS question.)</li>
+<li>Do different soil attributes influence one another? (SEM question)</li>
+<li>Are mean annual temperature data from PRISM and actual station data different from each other?
+<ul>
+<li>Is there geographic bias in the errors or significant differences?</li>
+<li>Pair-wise <strong>t-tests</strong> or other comparisons (Mann-Whitney)</li>
+<li>Download the data from CompBio
+<ul>
+<li>Frequentist vs Bayesian methods</li>
+</ul></li>
+</ul></li>
+<li>Can we predict the phase of snow using air temperature and other environmental data?
+<ul>
+<li>This is a classification problem that could be addressed with <strong>logistic regression</strong> and <strong>SVM</strong>.</li>
+</ul></li>
+<li>Are there significant trends in annual discharge over time?
+<ul>
+<li><strong>Linear regression</strong></li>
+<li>Map out the slope of significant trends across the US.
+<ul>
+<li>Use leaflet and clickable links to see individual annual hydrographs marked with a colored trend line and highlighting abnormal years using the emperical density function.</li>
+</ul></li>
+<li>Include both Frequentist and Bayesian forms of the analysis.</li>
+</ul></li>
+<li>Is there a relationship between annual discharge, temperature, snow, elevation, etc?
+<ul>
+<li><strong>Multiple linear regression</strong></li>
+</ul></li>
+<li>What role do different landscape features have on the above relationships?
+<ul>
+<li>Could use the GAGES-II data set for this</li>
+<li><strong>Hierarchical multiple linear regression</strong></li>
+<li>Frequentist and Bayesian</li>
+</ul></li>
+<li>Are their “natural” groups of discharge sensitivity (represented by the steepness of the slope)?
+<ul>
+<li><strong>Discriminant analysis</strong></li>
+</ul></li>
+</ul>
+</div>
+<div id="algorithms-to-investigate" class="section level2">
+<h2>Algorithms to investigate</h2>
+<p>How should I organize these algorithms? By Data type output? (This will help me figure out how to organize the site.)</p>
+<ul>
+<li>Data types</li>
+<li>Categorical
+<ul>
+<li>Nominal (Categories with no obvious relationship)</li>
+<li>Ordinal (Categories in which order does matter)</li>
+</ul></li>
+<li>Numerical
+<ul>
+<li>Interval (Integer data that maintain the same distance from each other – -5, 0, 5, 10)</li>
+<li>Ratio</li>
+</ul></li>
+<li>Further attributes to consider
+<ul>
+<li>Data output type</li>
+<li>Data input type</li>
+<li>Parameter type
+<ul>
+<li>Single</li>
+<li>Multiple
+<ul>
+<li>Mixed (categorical and numerical)</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<div id="the-algorithms" class="section level3">
+<h3>The algorithms</h3>
+<ul>
+<li>Linear regression</li>
+<li>Frequentist</li>
+<li>Bayesian</li>
+<li>Support Vector Machine
+<ul>
+<li><a href="https://shuzhanfan.github.io/2018/05/understanding-mathematics-behind-support-vector-machines/" class="uri">https://shuzhanfan.github.io/2018/05/understanding-mathematics-behind-support-vector-machines/</a></li>
+<li>Support Vector Regression
+<ul>
+<li><a href="https://www.svm-tutorial.com/2014/10/support-vector-regression-r/" class="uri">https://www.svm-tutorial.com/2014/10/support-vector-regression-r/</a>
+<ul>
+<li><code>e1071</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Generalized Linear Model (GLM)
+<ul>
+<li>Logistic regression
+<ul>
+<li>Frequentist</li>
+<li>Bayesian</li>
+</ul></li>
+<li>Other GLMs
+<ul>
+<li>Frequentist</li>
+<li>Bayesian</li>
+</ul></li>
+</ul></li>
+<li>Generalized Additive Model (GAM)
+<ul>
+<li>Frequentists
+<ul>
+<li><a href="https://m-clark.github.io/generalized-additive-models/" class="uri">https://m-clark.github.io/generalized-additive-models/</a></li>
+</ul></li>
+<li>Bayesian
+<ul>
+<li><a href="https://www.fromthebottomoftheheap.net/2018/04/21/fitting-gams-with-brms/" class="uri">https://www.fromthebottomoftheheap.net/2018/04/21/fitting-gams-with-brms/</a></li>
+</ul></li>
+</ul></li>
+<li>Dimensional reduction
+<ul>
+<li>PCA</li>
+<li>NMDS</li>
+</ul></li>
+<li>Classification
+<ul>
+<li>Supervised
+<ul>
+<li>Random forest
+<ul>
+<li><code>party</code></li>
+</ul></li>
+<li>Naive Bayes
+<ul>
+<li>Is this the same thing as discriminant analysis (which uses Bayes’ Theorem)</li>
+</ul></li>
+</ul></li>
+<li>Unsupervised
+<ul>
+<li>K-means clustering</li>
+<li>kNN (K-nearest neighbors)</li>
+</ul></li>
+</ul></li>
+<li>Gradient boosting</li>
+<li>Collaborative filtering</li>
+<li>ARIMA
+<ul>
+<li><a href="https://otexts.com/fpp2/" class="uri">https://otexts.com/fpp2/</a>
+<ul>
+<li><a href="https://otexts.com/fpp2/arima.html" class="uri">https://otexts.com/fpp2/arima.html</a></li>
+</ul></li>
+</ul></li>
+<li>Neural Nets</li>
+<li>A/B testing
+<ul>
+<li>t-tests</li>
+<li>Mann-Whitney</li>
+</ul></li>
+<li>Hierarchical modeling
+<ul>
+<li>Focus: van Genuchten model</li>
+<li>Frequentist
+<ul>
+<li><code>lme4</code></li>
+</ul></li>
+<li>Bayesian
+<ul>
+<li><code>Stan</code></li>
+</ul></li>
+<li>Deeply nested</li>
+</ul></li>
+<li>Structural equation modeling
+<ul>
+<li>Frequentists</li>
+<li>Bayesian</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="uncertainty" class="section level2">
+<h2>Uncertainty</h2>
+<p>Other topics that don’t fit neatly into the space above.</p>
+<ul>
+<li>Leave-one-out cross validation</li>
+<li>k-folds cross validation</li>
+</ul>
+</div>
+<div id="more-about-machine-learning-in-r" class="section level2">
+<h2>More about machine learning in R</h2>
+<ul>
+<li><a href="https://mlr.mlr-org.com/index.html" class="uri">https://mlr.mlr-org.com/index.html</a></li>
+</ul>
+</div>
+<div id="statistical-learning-resources" class="section level2">
+<h2>Statistical learning resources</h2>
+<ul>
+<li><a href="https://www.youtube.com/playlist?list=PLOg0ngHtcqbPTlZzRHA2ocQZqB1D_qZ5V" class="uri">https://www.youtube.com/playlist?list=PLOg0ngHtcqbPTlZzRHA2ocQZqB1D_qZ5V</a></li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

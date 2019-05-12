@@ -1,0 +1,73 @@
+body{ /* Normal  */
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+  }
+td {  /* Table  */
+  font-size: 16px;
+}
+title {
+  font-size: 38px;
+  font-family: "Times New Roman", Times, serif;
+  color: Black;
+}
+h1 { /* Header 1 */
+  font-size: 24px;
+  font-family: "Times New Roman", Times, serif;
+  color: Black;
+}
+h2 { /* Header 2 */
+  font-size: 22px;
+  font-family: "Times New Roman", Times, serif;
+  color: Black;
+}
+h3 { /* Header 3 */
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Black;
+}
+.r{ /* Code block */
+  font-size: 12px;
+}
+pre { /* Code block - determines code spacing between lines */
+  font-size: 16px;
+}
+.caption {
+  font-size: 16px;
+  font-style: italic;
+  color: grey;
+  margin-right: 5%;
+  margin-left: 5%;  
+  text-align: justify;
+}
+caption {
+  font-size: 16px;
+  font-style: italic;
+  color: grey;
+  margin-right: 5%;
+  margin-left: 5%;  
+  text-align: justify;
+}
+.buttond {
+  background-color: white;
+  color: black;
+  padding: 3px 6px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 4px;
+  font-family: "Times New Roman", Times, serif;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+.buttont {
+  background-color: white;
+  color: black;
+  border: 1px solid #555555;
+}
+.buttont:hover {
+  background-color: #555555;
+  color: white;
+}

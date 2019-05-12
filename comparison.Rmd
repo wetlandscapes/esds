@@ -1,0 +1,312 @@
+---
+title: "Mean annual air temperature in the contiguous US: 1895 to 2014"
+output: html_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message=FALSE,
+  warning=FALSE,
+  out.width = '100%',
+  fig.height = 3,
+  dev = "svglite"
+  )
+
+library(paletteer)
+library(pals)
+library(ggridges)
+library(kableExtra)
+library(mapview)
+library(sp)
+library(broom)
+library(tidyverse)
+
+load("data/processed/temperature_comparison.R") #temp_comp
+```
+
+TO DO:
+
+* Add some information about the paired t-test
+    * Purpose
+    * Assumptions
+    * Visual
+* Make a dynamic graphic with with differences in data source density plots
+* Write some concluding remarks about the findings of this paper
+
+## Overview
+
+In this section we are going to compare two data sets: USCHN and PRISM mean annual temperatures. The purpose of such a comparison is to understand if we can apply PRISM data to other problems with little fear of introducing bias into any resulting analysis.
+
+For now I'm going to focus on the ubiquitous __t-test__, but in later iterations of this document, I'm hoping to add the non-parametric __Mann-Whitney test__, as well as a __Bayesian t-test__.
+
+
+### Questions
+
+1. What does climate data, and specifically temperature data, look like for the contiguous US from approximately 1895 to 2014?
+2. Are observed and predicted mean annual air temperature values similar for data recorded or produced by major climate data warehouses? Specifically, how do data from the US Historical Climatology Network (observed) and Parameter-elevation Regressions on Independent Slopes Model (predicted) compare?
+3. Is there systematic bias between observed and predicted temperature data?
+4. Across the contiguous US, how much error should we expect from PRISM data, relative to the actual mean annual temperature?
+
+----
+
+## About the data
+
+USCHN ([US Historical Climatology Network](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/us-historical-climatology-network-ushcn)) hosts data observations from weather stations acros the contiguous US going back to 1895 in some cases. The downside of this data set is that the obsrevations are geographically discrete, meaning they only occur at specific points, and do not necessarily represent temperatures even a few hundred feet away.
+
+PRISM ([Parameter-elevation Regressions on Independent Slopes Model](http://www.prism.oregonstate.edu/)) data is also a long-term data set going back to approximately the same time period. However, PRISM data is grided
+
+Below is an example of the spatial distribution of both the USHCN and PRISM data sets.
+
+```{r, fig.cap="Figure: A comparison of the spatial distribution of the two data sets of interest, for a single year, 2014. The raster represents the PRISM data while the points are the weather stations from USHCN. Don't be fooled by the size of the points, the spatial weather station temperature coverage is small."}
+#Read in the prism data -- Focus: year 2014
+prism_file <- paste0("data/raw/ushcn/PRISM_tmean_stable_4kmM2_2014_bil/",
+                     "PRISM_tmean_stable_4kmM2_2014_bil.bil")
+prism_2014_df <- raster::raster(prism_file) %>%
+  #Convert from a raster to SpatialPixelsDataFrame
+  as("SpatialPixelsDataFrame")
+#Convert to tibble
+  #There is definitely a better way of coercing this thing...
+prism_2014_df <- bind_cols(as_tibble(pluck(prism_2014_df, "coords")),
+                           as_tibble(pluck(prism_2014_df, "data"))) %>%
+  setNames(c("x", "y", "temperature"))
+
+#Keep only the 2014 data from USHCN data
+temp_comp_2014 <- temp_comp %>%
+  filter(year == 2014)
+
+#Plot!
+prism_2014_df %>%
+  ggplot() +
+  geom_raster(aes(x, y, fill = temperature)) +
+  geom_point(data = temp_comp_2014, aes(longitude, latitude, fill = ushcn),
+             shape = 21, size = 2, alpha = 0.8) +
+  theme_void() +
+  coord_quickmap() +
+  scale_fill_distiller(palette = "Spectral", name = "Temp. (C)")
+```
+
+Given both the PRISM and USHNC data are using the same legend scale, there are no obvious differences in mean annual temperature for 2014, at least qualitatively.
+
+----
+
+## Data downloading and manipulation
+
+The code chunks that follow contain the set of instructions used to:
+
+1. Download the data from the:
+    a. USHNC website
+    b. PRISM website
+2. Extract the PRISM information at each USHNC site
+3. Join the two data sets.
+
+In data science, downloading and formatting data can take more effort than the actual analysis. For that reason, I've really enjoyed tools in the `tidyverse` set of R libraries, which make data manipulation relatively trivial.
+
+```{r, cache=FALSE}
+#Note: For the sake reducing the amount of time it takes this site to render,
+# I've broken up my analysis into scripts that do the actual work (see the R
+# file below) and the .Rmd files that were rendered to make the site (e.g.,
+# this file -- comparison.Rmd). This keeps me from having to re-do my analysis
+# over and over.
+
+#I found example 113 on Yihui's knitr-examples to be particularly useful in
+# understanding code externalization:
+# https://github.com/yihui/knitr-examples/blob/master/113-externalization.Rmd
+
+knitr::read_chunk("scripts/draft/temperature_comparison.R")
+```
+
+```{r temp_comp, eval=FALSE}
+```
+
+----
+
+## Checking the data
+
+Now that the data has been downloaded, it is time to explore at it and make sure it looks okay. First, let's look at the global distributions of the data, by source.
+
+```{r, fig.cap="Figure: The density distributions of both data sets across all sites and years. There are no obvious outliers, suggesting the data is in reasonably good condition."}
+fp <- paletteer_d(ggsci, lanonc_lancet, 4)[c(3,4)] %>%
+  setNames(c("PRISM", "USHCN"))
+
+temp_comp %>%
+  gather("source", "Temperature", ushcn, prism) %>%
+  mutate(source = toupper(source)) %>%
+  drop_na() %>%
+  ggplot(aes(Temperature, fill = source)) +
+  geom_density(alpha = 0.5) +
+  labs(y = "Probability density",
+       x = "Temperature (C)") +
+  theme_classic() +
+  scale_fill_manual(values = fp, name = NULL)
+
+```
+
+Well, the distributions of of all the data look pretty similar! That's good.
+
+Now let's see if we've got the kind of temporal coverage advertised by the two datasets.
+
+```{r, fig.cap="Figure: The temporal range of __every__ site highlighting the latitude of that observation. As expected, we have a lot of data for the adverised range of dates. Also the latitudinal pattern of temperatures makes sense, with some deviation likely due to high elevation parts of the country (e.g., Rocky Mountains)."}
+temp_comp %>%
+  rename("USHCN" = "ushcn", "PRISM" = "prism") %>%
+  gather("source", "value", USHCN, PRISM) %>%
+  mutate(source = factor(source, levels = c("PRISM", "USHCN"))) %>%
+  drop_na() %>%
+  ggplot(aes(year, value, color = latitude, group = station_id)) +
+  geom_line() +
+  labs(x = "Year",
+       y = "Temperature (C)") +
+  facet_wrap(~ source) +
+  theme_classic() +
+  theme(strip.background = element_blank()) +
+  scale_color_paletteer_c(pals, kovesi.rainbow_bgyr_35_85_c72, direction = -1,
+                          name = "Latitude\n(degrees)") +
+  scale_x_continuous(expand = c(0, 0))
+```
+
+Since our temporal coverage looks good, let's now examine the spatial coverage of the data. Specifically, let's look at where the USHCN sites are located and how the mean annual temperature across years is distributed in space. This should provide us at least some sense as to whether there is systematic bias between the two data sets.
+
+```{r, fig.height=6, fig.cap="Figure: The mean annual air temperatures at every site for every year by source. USHCN points were used to extract PRISM data and then averaged over the available data at each site."}
+
+temp_comp %>%
+  rename("USHCN" = "ushcn", "PRISM" = "prism") %>%
+  group_by(station_id) %>%
+  summarise(latitude = first(latitude),
+            longitude = first(longitude),
+            USHCN = mean(USHCN, na.rm = TRUE),
+            PRISM = mean(PRISM, na.rm = TRUE)) %>%
+  gather("source", "value", USHCN, PRISM) %>%
+  mutate(source = factor(source, levels = c("PRISM", "USHCN"))) %>%
+  ggplot() +
+  geom_map(data = map_data("usa"), map = map_data("usa"),
+           aes(map_id = region), fill = "white",
+           color= "black") +
+  geom_point(aes(longitude, latitude, fill = value),
+             shape = 21, size = 2, alpha = 0.8) +
+  facet_wrap(~source, nrow = 2) +
+  theme_void() +
+  coord_map() +
+  scale_fill_distiller(palette = "Spectral",
+                         name = "Mean\ntemperature (C)")
+```
+
+There are a number of other data checks we could perform, but what we've done is good enough for the purpose of this exercise, so let's start our analysis.
+
+----
+
+## Analyzing temperature differences in space and time
+
+### Paired t-test
+
+
+
+```{r, fig.cap="Figure: The mean temperature bias at each site when comparing the observed (USHCN) to predicted (PRISM) mean annual air temperatures from 1895 to 2014. In this context, warm colors illustrate that the PRISM data is overestimating the true temperature, while cooler colors occur where the PRISM data is underestimating the true temperature. Gray points were not significantly different, therefore we'd expect most of the points to be gray if there were no significant differences between the two data sets. Instead we see a large number of sites that tend to be red, suggesting potential bias. "}
+#Test the hypothesis that ushcn - prism = 0
+  #If estimate < 0 then the PRISM data is overestimating the temperature
+  #If estimate > 0 then the PRISM data is underestimating the temperature
+temper_ttest <- temp_comp %>%
+  split(.$station_id) %>%
+  purrr::map(dplyr::select, ushcn, prism) %>%
+  purrr::map(drop_na) %>%
+  purrr::map(~t.test(.x$ushcn, .x$prism, alternative = "two.sided", paired = TRUE)) %>%
+  purrr::map_dfr(glance, .id = "station_id")
+
+temper_tested <- temp_comp %>%
+  dplyr::select(station_id, latitude, longitude, elevation) %>%
+  distinct() %>%
+  full_join(temper_ttest, by = "station_id") %>%
+  mutate(signif = ifelse(estimate < 0, "Overestimate", "Underestimate"),
+         signif = ifelse(p.value > 0.05, "Unbiased", signif),
+         signif = factor(signif, levels = c("Overestimate", "Unbiased",
+                                            "Underestimate"))) %>%
+  mutate(estimate_NA = ifelse(p.value > 0.05, NA, estimate))
+
+temper_tested %>%
+  ggplot() +
+  geom_map(data = map_data("usa"), map = map_data("usa"),
+           aes(map_id = region), fill = "white",
+           color= "black") +
+  geom_point(aes(longitude, latitude, fill = estimate_NA),
+             shape = 21, size = 2, alpha = 0.8) +
+  theme_void() +
+  coord_map() +
+  scale_fill_paletteer_c(pals, ocean.balance, direction = -1, limits = c(-4, 4),
+                         name = "Mean\ntemperature\nbias (C)",
+                         na.value = "grey50")
+
+```
+
+
+```{r, fig.cap="Figure: The distribution of mean bias in the temperature record between observed and predicted data. Again, warm and cool colors indicate over and underestimated temperature predictions. Note that the mean is near zero suggesting (though not conclusively) no underlying bias in temperature predictions in the PRISM data set."}
+
+temper_tested %>%
+  ggplot(aes(estimate, 1, fill = ..x..)) +
+  geom_density_ridges_gradient() +
+  labs(x = "Mean temperature bias (C)",
+       y = "Probability density") +
+  theme_classic() +
+  theme(legend.position = "none") +  
+  scale_x_continuous(limits = c(-4, 4), expand = c(0, 0)) +
+  scale_fill_paletteer_c(pals, ocean.balance, -1, limits = c(-4, 4))
+```
+
+
+
+```{r}
+temper_tested %>%
+  group_by(signif) %>%
+  summarise(Proportion = n()) %>%
+  ungroup() %>%
+  mutate(Proportion = round(Proportion/nrow(temper_tested), digits = 2)) %>%
+  rename("Directionality in temperature difference" = "signif") %>%
+  as_tibble() %>%
+  kable(caption = "Table: The different proportions of data that were overestimated, underestimated, or unbiased. The relatively large proportion of overestimated data in combination with the last figure suggests the PRISM data may be systematically overestimating the true mean annual air temperature, assuming the USNHC data is also unbiased.") %>%
+  kable_styling()
+```
+
+```{r, cache=FALSE, include=FALSE}
+knitr::read_chunk("scripts/mapview_comparison.R")
+```
+
+```{r mapview_comp, eval=FALSE}
+```
+
+
+```{r, fig.height=7}
+#Record the name of all the plots
+density_p_files <- paste0("figures/R/comparison/", temper_ttest$station_id,
+                          ".png")
+
+#Generate a categorical color palette
+cp <- ocean.balance(11)[c(2, 9)]
+cp <- c(cp[2], "gray50", cp[1])
+names(cp) <- c("Overestimate", "Unbiased", "Underestimate")
+
+#Set some standard mapview options
+mapviewOptions(basemaps = c("Esri.WorldImagery", "OpenStreetMap"),
+               vector.palette = cp,
+               na.color = "gray50",
+               legend = TRUE,
+               layers.control.pos = "topright")
+
+#Generate 
+temper_tested %>%
+  left_join(temp_comp %>% distinct(station_id, name), by = "station_id") %>%
+  select(longitude, latitude, signif, name) %>%
+  drop_na() %>%
+  rename("Temp. bias (C)" = "signif") %>%
+  SpatialPointsDataFrame(cbind(.$longitude, .$latitude), data = .,
+                         proj4string = CRS("+init=epsg:4326")) %>%
+  mapView(zcol = "Temp. bias (C)",
+          label = .$name,
+          color = "gray50",
+          popup = popupImage(density_p_files, src = "remote"))
+```
+
+
+----
+
+## Conclusions
+
+
+

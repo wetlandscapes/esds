@@ -1,0 +1,16 @@
+name: "esds"
+output_dir: "."
+navbar:
+  type: inverse
+  title: "Earth System Data Science"
+  right:
+    - text: "About"
+      href: index.html
+    - text: "Regression"
+      menu:
+        - text: "Comparisons"
+          href: comparison.html
+output:
+  html_document:
+    code_folding: hide
+    css: custom.css
