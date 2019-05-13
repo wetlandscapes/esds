@@ -1,7 +1,6 @@
 name: "esds"
 output_dir: "."
 navbar:
-  type: inverse
   title: "Earth System Data Science"
   right:
     - text: "About"
@@ -14,3 +13,6 @@ output:
   html_document:
     code_folding: hide
     css: custom.css
+    theme: cosmo #defaults https://bootswatch.com/3/
+    #highlight: tomorrow-night-bright copied to custom.css
+        #defaults https://eranraviv.com/syntax-highlighting-style-in-rmarkdown/

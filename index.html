@@ -12,11 +12,11 @@
 <meta name="author" content="Jason Mercer" />
 
 
-<title>About this site</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -282,7 +282,7 @@ $(document).ready(function () {
 
 
 
-<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -329,21 +329,13 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">About this site</h1>
-<h4 class="author">Jason Mercer</h4>
-<h4 class="date">Last updated: 2019-05-12</h4>
 
 </div>
 
 
-<pre class="r"><code>#Options----
-knitr::opts_chunk$set(
-  echo = TRUE,
-  fig.width = 9,
-  fig.height = 5,
-  dev = &quot;svglite&quot;)</code></pre>
-<div id="about-this-site" class="section level2">
-<h2>About this site</h2>
+<p><br></p>
+<div id="what-is-earth-system-data-science" class="section level2">
+<h2>What is Earth System Data Science?</h2>
 <p>The purpose of this site is to provide some insights into how to do common data science tasks in the context of <strong>earth system science (ESS)</strong>. Generally speaking, earth system science focuses on interactions between the various “spheres” of the earth system. In the context of this site, we’re largely going to focus on the atmosphere, hydrosphere, and pedosphere (Soils! Please don’t put me on some kind of FBI list…), with some of the biosphere thrown in for good measure.</p>
 <p><strong>Data science (DS)</strong>, like ESS, is also multi-disciplinary, and includes concepts from statistics, computer science, programming, etc. Thus, the combination of ESS and DS is <strong>earth system data science (ESDS)</strong>. In this context, we’ll be moving through a number a techniques and algorithms that can be used in ESDS to answer questions we might have about the Earth system. These could include:</p>
 <ul>
@@ -459,7 +451,7 @@ knitr::opts_chunk$set(
 <h2>Frequentist vs Bayesian paradigms</h2>
 <p>In statistics, there are two major paradigms: Frequentism and Bayesianism. A thorough review of these two schools of thought is beyond the scope of this site, but see the “General resources” section for other places where such reviews have been made. However, the two ideas are pretty well summarized by the following (<a href="https://xkcd.com/1132/">XKCD</a>):</p>
 <center>
-<img src="https://imgs.xkcd.com/comics/frequentists_vs_bayesians.png" />
+<img src="https://imgs.xkcd.com/comics/frequentists_vs_bayesians.png" width="400"/>
 </center>
 <p><br> In essence, the Bayesian view point allows us to incorporate past information, if it exists, to update our understanding of how a system works and our confidence in our new understanding. In the context of the comic above, this means we can incorporate past experience related to the sun (not) exploding to better predict if a model’s results are anomalous.</p>
 <p>In practice, this tends to produce greater model uncertainties than Frequentist methods, meaning we are being conservative with how well we think a model will predict some condition of interest. At first that may sound bad, as we want precise predictions, but I’ll argue that this model conservatism is a good thing, because it doesn’t promote as much over confidence in results.</p>
@@ -491,10 +483,11 @@ However, we can also think of statistics as a means of assessing uncertainty eve
 Aleatory vs epistemic uncertainty, Laplace's Demon (determinism), and the Turing machine
 --></h2>
 </div>
-<div id="programming" class="section level2">
-<h2>Programming</h2>
+<div id="programming-and-reproducibility" class="section level2">
+<h2>Programming and reproducibility</h2>
 <p>I’m going to focus on using the R statistical programming language, because it has become a favorite generalist scripting language used in the statistics, biology, and ESS communities. It is also highly extensible and was used to build this website via the <code>knitr</code> and <code>rmarkdown</code> packages.</p>
 <p>In the context of R, I’ll be largely following “tidyverse” principles related to formating code and data. The <a href="https://style.tidyverse.org/">Tidyverse Style Guide</a> has more on generating tidy code. Chapter 12 of <a href="https://r4ds.had.co.nz/tidy-data.html">R for Data Science</a> has more on tidy data.</p>
+<p>Also, all files and code used to generate this site are available at: <a href="https://github.com/wetlandscapes/esds" class="uri">https://github.com/wetlandscapes/esds</a></p>
 <hr />
 </div>
 <div id="general-resources" class="section level2">

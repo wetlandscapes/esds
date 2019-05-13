@@ -1,12 +1,10 @@
 ---
-title: "About this site"
 author: "Jason Mercer"
 date: "Last updated: `r Sys.Date()`"
-output:
-  html_document
+output: html_document
 ---
 
-```{r isetup, message=FALSE, warning=FALSE}
+```{r isetup, message=FALSE, warning=FALSE, include=FALSE}
 #Options----
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -16,7 +14,9 @@ knitr::opts_chunk$set(
 
 ```
 
-## About this site
+<br>
+
+## What is Earth System Data Science?
 
 The purpose of this site is to provide some insights into how to do common data science tasks in the context of __earth system science (ESS)__. Generally speaking, earth system science focuses on interactions between the various "spheres" of the earth system. In the context of this site, we're largely going to focus on the atmosphere, hydrosphere, and pedosphere (Soils! Please don't put me on some kind of FBI list...), with some of the biosphere thrown in for good measure.
 
@@ -112,7 +112,7 @@ Based on the above perspectives, the site is grouped into three categories: regr
 In statistics, there are two major paradigms: Frequentism and Bayesianism. A thorough review of these two schools of thought is beyond the scope of this site, but see the "General resources" section for other places where such reviews have been made. However, the two ideas are pretty well summarized by the following ([XKCD](https://xkcd.com/1132/)):
 
 <center>
-![](https://imgs.xkcd.com/comics/frequentists_vs_bayesians.png)
+<img src="https://imgs.xkcd.com/comics/frequentists_vs_bayesians.png" width="400"/>
 </center>
 
 <br>
@@ -150,11 +150,13 @@ Aleatory vs epistemic uncertainty, Laplace's Demon (determinism), and the Turing
 
 ----
 
-## Programming
+## Programming and reproducibility
 
 I'm going to focus on using the R statistical programming language, because it has become a favorite generalist scripting language used in the statistics, biology, and ESS communities. It is also highly extensible and was used to build this website via the `knitr` and `rmarkdown` packages.
 
 In the context of R, I'll be largely following "tidyverse" principles related to formating code and data. The [Tidyverse Style Guide](https://style.tidyverse.org/) has more on generating tidy code. Chapter 12 of [R for Data Science](https://r4ds.had.co.nz/tidy-data.html) has more on tidy data.
+
+Also, all files and code used to generate this site are available at: [https://github.com/wetlandscapes/esds](https://github.com/wetlandscapes/esds)
 
 ----
 

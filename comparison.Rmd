@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   dev = "svglite"
   )
 
+#Libraries----
 library(paletteer)
 library(pals)
 library(ggridges)
@@ -22,26 +23,29 @@ library(sp)
 library(broom)
 library(tidyverse)
 
+#Load data----
 load("data/processed/temperature_comparison.R") #temp_comp
 ```
 
-TO DO:
+<!-- TO DO:
 
 * Add some information about the paired t-test
     * Purpose
     * Assumptions
     * Visual
+        * Could I some how make an animation?
 * Make a dynamic graphic with with differences in data source density plots
-* Write some concluding remarks about the findings of this paper
+* Write some concluding remarks about the findings of this paper -->
 
 ## Overview
 
-In this section we are going to compare two data sets: USCHN and PRISM mean annual temperatures. The purpose of such a comparison is to understand if we can apply PRISM data to other problems with little fear of introducing bias into any resulting analysis.
+In this section we are going to compare two data sets: USCHN and PRISM mean annual temperatures. The purpose of such a comparison is to understand if we can apply PRISM data to other problems with little fear of introducing bias into any resulting analysis. PRISM data is commonly used in areas where there are no nearby weather stations (see "About the data" below).
 
-For now I'm going to focus on the ubiquitous __t-test__, but in later iterations of this document, I'm hoping to add the non-parametric __Mann-Whitney test__, as well as a __Bayesian t-test__.
-
+For now I'm going to focus on the ubiquitous __t-test__ for comparing our data, but in later iterations of this document, I'm hoping to add the non-parametric __Mann-Whitney test__, as well as a __Bayesian t-test__.
 
 ### Questions
+
+For this exercise I'm going to focus on a few questions to help guide the analysis:
 
 1. What does climate data, and specifically temperature data, look like for the contiguous US from approximately 1895 to 2014?
 2. Are observed and predicted mean annual air temperature values similar for data recorded or produced by major climate data warehouses? Specifically, how do data from the US Historical Climatology Network (observed) and Parameter-elevation Regressions on Independent Slopes Model (predicted) compare?
@@ -52,16 +56,17 @@ For now I'm going to focus on the ubiquitous __t-test__, but in later iterations
 
 ## About the data
 
-USCHN ([US Historical Climatology Network](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/us-historical-climatology-network-ushcn)) hosts data observations from weather stations acros the contiguous US going back to 1895 in some cases. The downside of this data set is that the obsrevations are geographically discrete, meaning they only occur at specific points, and do not necessarily represent temperatures even a few hundred feet away.
+USHCN ([US Historical Climatology Network](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/us-historical-climatology-network-ushcn)) hosts data observations from weather stations across the contiguous US going back to before 1895 in some cases (1866 is the earliest year for mean annual temperature data). The downside of this data set is that the observations are geographically discrete, meaning they only occur at specific points, and do not necessarily represent temperatures even a few hundred feet away.
 
-PRISM ([Parameter-elevation Regressions on Independent Slopes Model](http://www.prism.oregonstate.edu/)) data is also a long-term data set going back to approximately the same time period. However, PRISM data is grided
+PRISM ([Parameter-elevation Regressions on Independent Slopes Model](http://www.prism.oregonstate.edu/)), on the other hand, occurs across the entire lower 48 as a grid. PRISM data is also a long-term, going back to exactly 1895. However, the spatial resolution of the data is between 800 m and 4 km, which is relatively coarse compared to the point estimates recorded by the USHCN data.
 
-Below is an example of the spatial distribution of both the USHCN and PRISM data sets.
+Thus, there is a potential trade-off in using each data set: temperature accuracy vs spatial coverage. And speaking of spatial coverage the figure below provides an example of the spatial distribution of both the USHCN and PRISM data sets, focusing in on the year 2014.
 
 ```{r, fig.cap="Figure: A comparison of the spatial distribution of the two data sets of interest, for a single year, 2014. The raster represents the PRISM data while the points are the weather stations from USHCN. Don't be fooled by the size of the points, the spatial weather station temperature coverage is small."}
-#Read in the prism data -- Focus: year 2014
+#Read in the prism data for 2014
 prism_file <- paste0("data/raw/ushcn/PRISM_tmean_stable_4kmM2_2014_bil/",
                      "PRISM_tmean_stable_4kmM2_2014_bil.bil")
+#.bil files are a kind of raster
 prism_2014_df <- raster::raster(prism_file) %>%
   #Convert from a raster to SpatialPixelsDataFrame
   as("SpatialPixelsDataFrame")
@@ -69,6 +74,7 @@ prism_2014_df <- raster::raster(prism_file) %>%
   #There is definitely a better way of coercing this thing...
 prism_2014_df <- bind_cols(as_tibble(pluck(prism_2014_df, "coords")),
                            as_tibble(pluck(prism_2014_df, "data"))) %>%
+  #Specify meaningful names
   setNames(c("x", "y", "temperature"))
 
 #Keep only the 2014 data from USHCN data
@@ -82,11 +88,14 @@ prism_2014_df %>%
   geom_point(data = temp_comp_2014, aes(longitude, latitude, fill = ushcn),
              shape = 21, size = 2, alpha = 0.8) +
   theme_void() +
+  #`quickmap` allows me to use the right projection, but draw the raster at a
+  # coarse resolution, so I don't have to sit around for long while the image
+  # renders (unlike when I use `coord_map`).
   coord_quickmap() +
   scale_fill_distiller(palette = "Spectral", name = "Temp. (C)")
 ```
 
-Given both the PRISM and USHNC data are using the same legend scale, there are no obvious differences in mean annual temperature for 2014, at least qualitatively.
+Given both the PRISM and USHNC data are using the same legend scale, there are no obvious visual differences in mean annual temperature for 2014.
 
 ----
 
@@ -100,7 +109,7 @@ The code chunks that follow contain the set of instructions used to:
 2. Extract the PRISM information at each USHNC site
 3. Join the two data sets.
 
-In data science, downloading and formatting data can take more effort than the actual analysis. For that reason, I've really enjoyed tools in the `tidyverse` set of R libraries, which make data manipulation relatively trivial.
+In data science, downloading and formatting data can take more effort than the actual analysis. For this reason the code chunks below are pretty long. To see the analysis, click the "Code" buttons to the right.
 
 ```{r, cache=FALSE}
 #Note: For the sake reducing the amount of time it takes this site to render,
@@ -121,18 +130,22 @@ knitr::read_chunk("scripts/draft/temperature_comparison.R")
 
 ----
 
-## Checking the data
+## Exploratory data analysis
 
-Now that the data has been downloaded, it is time to explore at it and make sure it looks okay. First, let's look at the global distributions of the data, by source.
+Now that the data has been downloaded, it is time to explore it and make sure it looks okay. First, let's look at the global distributions of the data, by source.
 
 ```{r, fig.cap="Figure: The density distributions of both data sets across all sites and years. There are no obvious outliers, suggesting the data is in reasonably good condition."}
+#Create a "fill palette" for the plot below
 fp <- paletteer_d(ggsci, lanonc_lancet, 4)[c(3,4)] %>%
   setNames(c("PRISM", "USHCN"))
 
 temp_comp %>%
+  #Reformating the data into a "long" format for ggplot
   gather("source", "Temperature", ushcn, prism) %>%
   mutate(source = toupper(source)) %>%
+  #Getting rid of some NAs
   drop_na() %>%
+  #Plot!
   ggplot(aes(Temperature, fill = source)) +
   geom_density(alpha = 0.5) +
   labs(y = "Probability density",
@@ -142,9 +155,7 @@ temp_comp %>%
 
 ```
 
-Well, the distributions of of all the data look pretty similar! That's good.
-
-Now let's see if we've got the kind of temporal coverage advertised by the two datasets.
+Well, the distributions of of all the data look pretty similar! That's good. Now let's see if we've got the kind of temporal coverage advertised by the two datasets. _Note: exploring your data is essential. During the early stages of making this site, I didn't download all of the PRISM data (download error) and didn't realize it until making this plot. So remember to always plot your data!_
 
 ```{r, fig.cap="Figure: The temporal range of __every__ site highlighting the latitude of that observation. As expected, we have a lot of data for the adverised range of dates. Also the latitudinal pattern of temperatures makes sense, with some deviation likely due to high elevation parts of the country (e.g., Rocky Mountains)."}
 temp_comp %>%
@@ -152,6 +163,7 @@ temp_comp %>%
   gather("source", "value", USHCN, PRISM) %>%
   mutate(source = factor(source, levels = c("PRISM", "USHCN"))) %>%
   drop_na() %>%
+  #Plot!
   ggplot(aes(year, value, color = latitude, group = station_id)) +
   geom_line() +
   labs(x = "Year",
@@ -204,12 +216,24 @@ There are a number of other data checks we could perform, but what we've done is
 #Test the hypothesis that ushcn - prism = 0
   #If estimate < 0 then the PRISM data is overestimating the temperature
   #If estimate > 0 then the PRISM data is underestimating the temperature
+
+#This is really the workhorse code for the t-test.
 temper_ttest <- temp_comp %>%
+  #Split the dataframe in to lists by station id
   split(.$station_id) %>%
+  #Keep only the temperature data from the two data sets
   purrr::map(dplyr::select, ushcn, prism) %>%
+  #Get rid of any NAs, because `t.test` can't handle them
   purrr::map(drop_na) %>%
-  purrr::map(~t.test(.x$ushcn, .x$prism, alternative = "two.sided", paired = TRUE)) %>%
-  purrr::map_dfr(glance, .id = "station_id")
+  #Do the t-tests!
+  purrr::map(~t.test(.x$ushcn, .x$prism, alternative = "two.sided",
+                     paired = TRUE)) %>%
+  #The broom package has a convenient function for taking the output returned
+  # from a t-test turning it into a tibble/dataframe.
+    #`map_dfr` combines all the t-test information into a single dataframe and
+    # uses the station ids (recorded from `split`) as a new column called
+    # "station_id" allowing us to figure out where the data came from.
+  purrr::map_dfr(broom::glance, .id = "station_id")
 
 temper_tested <- temp_comp %>%
   dplyr::select(station_id, latitude, longitude, elevation) %>%
@@ -274,7 +298,7 @@ knitr::read_chunk("scripts/mapview_comparison.R")
 
 ```{r, fig.height=7}
 #Hardcode the static locations of the files.
-  #Note the "blob/master" part of the 
+  #This took toooooo long to figure out how to do.
 web_files <- paste0("https://raw.githubusercontent.com/wetlandscapes/esds/master/",
                     "figures/R/comparison/", temper_ttest$station_id, ".png")
 # web_files <- paste0("../figures/R/comparison/", temper_ttest$station_id, ".png")
@@ -305,10 +329,14 @@ temper_tested %>%
           popup = popupImage(web_files, src = "remote"))
 ```
 
+Add an explanation
 
 ----
 
 ## Conclusions
 
+### t-test
+
+Based on the results of our 1,200+ pair-wise t-tests, it does look like there might be some systematic bias in mean annual temperature estimates of the PRISM data, relative to the USHCN data.
 
 
