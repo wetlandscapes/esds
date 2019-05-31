@@ -210,7 +210,64 @@ There are a number of other data checks we could perform, but what we've done is
 
 ### Paired t-test
 
+The _t_-test is a parametric test that is used to compare if an expected value is significantly different from some other value of interest using only a couple of pieces of information -- namely a quantile (e.g., mean) and the degrees of freedom ($df$; $observations - 1$). For example, if we want to know if a mean value is significantly different from zero, we can use the Student's _t_-distribution to generate a probability. The Student's _t_-distribution, in turn, is defined as:
 
+$$
+f(x, df) = \frac{\Gamma \frac{df+1}{2}}{\sqrt{df \pi} \frac{df}{2}}\bigg(1 + \frac{x^2}{df}\bigg) ^ {-\frac{df + 1}{2}}
+$$
+
+Where $x$ is the quantile of interest, $\pi$ is the value 3.1416..., and $\Gamma$ is the gamma function. What is nice about this distribution is that it only has one parameter associated with it, $df$. That is, we can test hypotheses using the _t_-distrubtion with information that is always known (i.e., number of observations), unlike the normal distribution, which requires an estimate of both a mean and standard deviation. But how sensitive is the _t_-distribution to degrees of freedom? The image below highlights a number of distributional outcomes for various degrees of freedom.
+
+```{r, fig.cap="Figure: Sensitivity of the t-distribution to changes in degrees of freedom. Note that the distribution is fairly sensitive near 1 (i.e., large relative difference between the 'peak' in the distributions for df 1 and 2), but becomes increasingly less sensitive to changes in df as more observations are made."}
+as.list(c(1, 2, 5, 50, 100)) %>%
+  set_names(as.character(c(1, 2, 5, 50, 100))) %>%
+  map_dfr(~ tibble(df = .x, quantile = seq(-10, 10, length.out = 1000))) %>%
+  group_by(df) %>%
+  mutate(probability = dt(quantile, df)) %>%
+  ungroup() %>%
+  mutate(df = fct_inorder(as.factor(df), ordered = TRUE)) %>%
+  ggplot() +
+  geom_line(aes(quantile, probability, color = df), size = 1) +
+  labs(x = "Quantile",
+    y = "Probability density") +
+  theme_classic() +
+  scale_color_brewer(palette = "Set1", name = "Degrees of\nfreedom (df)")
+```
+
+The take home is that the distribution is fairly insensitive to the degrees of freedom, after about 30 observations.
+
+<!--
+```{r}
+expand.grid(quant = seq(1, 50, by = 0.1),
+  degrees = c(1, 2, 5, 50, 100),
+  p_logic = c(FALSE, TRUE)) %>%
+  as_tibble() %>%
+  group_by(p_logic) %>%
+  mutate(p_value = dt(x = quant, df = degrees, log = p_logic),
+    degrees = as.character(degrees),
+    degrees = fct_inorder(degrees),
+    relation = ifelse(p_logic, "Log probability", "Probability")) %>%
+  ungroup() %>%
+  mutate(relation = fct_inorder(relation)) %>%
+  ggplot(aes(quant, p_value, color = degrees)) +
+  geom_line(size = 1) +
+  facet_wrap(~ relation, scales = "free_y", strip.position = "left") +
+  labs(x = "Quantile",
+    y = NULL) +
+  theme_classic() +
+  theme(strip.background = element_blank(),
+    strip.placement = "outside") +
+  scale_color_brewer(palette = "Set1", name = "df")
+```
+-->
+
+The cumulative distribution function for the Student's _t_-distribution is:
+
+$$
+F(x, df) = \frac{1}{2} + x \Gamma\bigg(\frac{df + 1}{2}\bigg) \frac{{}_2F_1\Big(\frac{1}{2}, \frac{df+1}{2};\frac{3}{2};-\frac{x^2}{df}\Big)}{\sqrt{\pi df}\Gamma \frac{df}{2}}
+$$
+
+Where ${}_2F_1$ is the [hypergeometric function](https://en.wikipedia.org/wiki/Hypergeometric_distribution). This is useful in the context of comparing two distributions, becaause we can use the difference and standard deviation in that difference to test if the distributions have the same mean.
 
 ```{r, fig.cap="Figure: The mean temperature bias at each site when comparing the observed (USHCN) to predicted (PRISM) mean annual air temperatures from 1895 to 2014. In this context, warm colors illustrate that the PRISM data is overestimating the true temperature, while cooler colors occur where the PRISM data is underestimating the true temperature. Gray points were not significantly different, therefore we'd expect most of the points to be gray if there were no significant differences between the two data sets. Instead we see a large number of sites that tend to be red, suggesting potential bias. "}
 #Test the hypothesis that ushcn - prism = 0
